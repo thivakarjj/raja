@@ -1,0 +1,23 @@
+module "linux_vmss" {
+  source                       = "./modules/vmss"
+  for_each                     = var.vmss_configs
+  vmss_name                    = each.value.vmss_name
+  rg_name                      = each.value.rg_name
+  location                     = each.value.location
+  vm_size                      = each.value.vm_size
+  admin_username               = each.value.admin_username
+  custom_image_id              = each.value.custom_image_id
+  subnet_id                    = each.value.subnet_id
+  ip_configurations            = each.value.ip_configurations
+  zones                        = each.value.zones
+  os_disk_caching              = each.value.os_disk_caching
+  os_disk_storage_account_type = each.value.os_disk_storage_account_type
+  os_disk_size_gb              = each.value.os_disk_size_gb
+  key_vault_id                 = each.value.key_vault_id
+  tenant_id                    = each.value.tenant_id
+  initial_instance_count       = each.value.instance_count
+  min_instance_count           = each.value.min_instance_count
+  max_instance_count           = each.value.max_instance_count
+  environment                  = each.value.environment
+  enable_automatic_upgrade     = each.value.enable_automatic_upgrade
+}
