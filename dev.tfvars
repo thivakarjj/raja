@@ -1,25 +1,46 @@
 vmss_configs = {
   "app-vmss" = {
-    vmss_name       = "app-vmss"
+    vmss_name       = "devops-vmss"
     rg_name         = "devops-giri"
-    location        = "eastus"
-    vm_size         = "Standard_DS2_v2"
+    location        = "eastus2"
+    vm_size         = "Standard_NV4as_v4"
     admin_username  = "azureuser"
-    custom_image_id = "/subscriptions/ff61c832-819b-46dc-b485-7196a37165bc/resourceGroups/devops-giri/providers/Microsoft.Compute/galleries/linux/images/linux/versions/0.0.1"
-    subnet_id       = "/subscriptions/ff61c832-819b-46dc-b485-7196a37165bc/resourceGroups/devops-giri/providers/Microsoft.Network/virtualNetworks/devops-vnet/subnets/devcenterpoc"
+    use_marketplace = true
+    publisher       = "Canonical"
+    offer           = "0001-com-ubuntu-server-jammy"
+    sku             = "22_04-lts"
+    version         = "latest"
+    #custom_image_id = "/subscriptions/ff61c832-819b-46dc-b485-7196a37165bc/resourceGroups/devops-giri/providers/Microsoft.Compute/galleries/linux/images/linux/versions/0.0.1"
+    subnet_id       = "/subscriptions/21a91bed-d635-447a-aec9-e80f32c23443/resourceGroups/devops-giri/providers/Microsoft.Network/virtualNetworks/vnet-eastus2/subnets/dev"
+    nic_name        = "nic-app"
     ip_configurations = {
       ip0 = { name = "ipconfig0" }
     }
-    zones                        = [1, 2, 3]
+    zones                        = null
     os_disk_caching              = "ReadWrite"
     os_disk_storage_account_type = "Premium_LRS"
     os_disk_size_gb              = 30
-    key_vault_id                 = "/subscriptions/ff61c832-819b-46dc-b485-7196a37165bc/resourceGroups/devops-giri/providers/Microsoft.KeyVault/vaults/devcenter-vault-demo"
-    tenant_id                    = "6b464218-6814-4c2e-a102-a5a7fc8452a9"
-    instance_count               = 2
+    key_vault_id                 = "/subscriptions/21a91bed-d635-447a-aec9-e80f32c23443/resourceGroups/devops-giri/providers/Microsoft.KeyVault/vaults/azuredevopsvault09"
+    key_vault_name               = "azuredevopsvault09"
+    tenant_id                    = "8a18c8e4-c77a-4b73-8926-b2430f6c6a9a"
+    instance_count               = 1
     min_instance_count           = 1
     max_instance_count           = 5
     environment                  = "dev"
-    enable_automatic_upgrade     = true
+    agent_pat_secret_name        = "pat"
+    agent_user                   = "adodevagent"
+    agent_version                = "4.264.2"
   }
 }
+
+subscription_id = "21a91bed-d635-447a-aec9-e80f32c23443"
+client_id       = "dd6b0392-1f13-4469-8c8b-a739751ad609"
+client_secret   = "Imm8Q~-N~oDlg49iiDFzxdF1kkleh4hqXArAicIi"
+tenant_id       = "8a18c8e4-c77a-4b73-8926-b2430f6c6a9a"
+
+azuredevops_org_service_url    = "https://dev.azure.com/achuthadevops25"
+azuredevops_pat_key_vault_id   = "/subscriptions/21a91bed-d635-447a-aec9-e80f32c23443/resourceGroups/devops-giri/providers/Microsoft.KeyVault/vaults/azuredevopsvault09"
+#azuredevops_pat_secret_name    = "pat"
+azdo_org_url          = "https://dev.azure.com/achuthadevops25"
+agent_pat_secret_name = "pat"
+agent_pool_name = "prod-vmss-pool"

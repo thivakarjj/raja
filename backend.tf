@@ -1,8 +1,8 @@
 terraform {
   backend "azurerm" {
     resource_group_name  = "devops-giri"
-    storage_account_name = "azureblobstorage09"
+    storage_account_name = "azureblobstorage08"
     container_name       = "tfstate"
-    key                  = "vmss-prod.tfstate"
+    key                  = "vmss-dev.tfstate"
   }
 }

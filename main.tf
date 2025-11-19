@@ -2,13 +2,19 @@ module "linux_vmss" {
   source                       = "./modules/vmss"
   for_each                     = var.vmss_configs
   vmss_name                    = each.value.vmss_name
+  agent_pool_name              = var.agent_pool_name
   rg_name                      = each.value.rg_name
   location                     = each.value.location
   vm_size                      = each.value.vm_size
   admin_username               = each.value.admin_username
-  custom_image_id              = each.value.custom_image_id
   subnet_id                    = each.value.subnet_id
-  ip_configurations            = each.value.ip_configurations
+  nic_name                     = each.value.nic_name
+  ip_config_name               = values(each.value.ip_configurations)[0].name
+  use_marketplace              = lookup(each.value, "use_marketplace", true)
+  publisher                    = lookup(each.value, "publisher", "Canonical")
+  offer                        = lookup(each.value, "offer", "0001-com-ubuntu-server-jammy")
+  sku                          = lookup(each.value, "sku", "22_04-lts")
+  image_version                = lookup(each.value, "image_version", "latest")
   zones                        = each.value.zones
   os_disk_caching              = each.value.os_disk_caching
   os_disk_storage_account_type = each.value.os_disk_storage_account_type
@@ -19,5 +25,10 @@ module "linux_vmss" {
   min_instance_count           = each.value.min_instance_count
   max_instance_count           = each.value.max_instance_count
   environment                  = each.value.environment
-  enable_automatic_upgrade     = each.value.enable_automatic_upgrade
+
+  azdo_org_url                 = var.azdo_org_url
+  agent_pat_secret_name        = var.agent_pat_secret_name
+  key_vault_name               = each.value.key_vault_name
+  agent_version                = each.value.agent_version
+  agent_user                   = each.value.agent_user
 }

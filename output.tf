@@ -1,4 +1,3 @@
-# Expose module outputs for all instances
 output "vmss_ids" {
   description = "Map of VMSS ids keyed by vmss_configs key"
   value       = { for k, m in module.linux_vmss : k => m.vmss_id }
