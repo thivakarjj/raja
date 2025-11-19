@@ -96,7 +96,7 @@ for cmd in curl jq tar base64; do
   command -v "$cmd" >/dev/null 2>&1 || abort "$cmd missing"
 done
 
-# ============ WAIT LOGIC ADDED HERE (30 seconds) ============
+# ============ WAIT LOGIC (30 seconds) ============
 
 log INFO "Waiting 30 seconds for Key Vault identity/RBAC propagation..."
 sleep 30
@@ -225,7 +225,9 @@ POOL_NAME="__POOL_NAME__"
 PAT="__PAT_PLACEHOLDER__"
 
 LOG_FILE="/var/log/ado-offline-agent-cleanup.log"
-AGENT_NAME_PREFIX="$POOL_NAME"
+
+# Empty prefix => act on ALL agents in the pool
+AGENT_NAME_PREFIX=""
 
 log() { echo "$(date '+%F %T') [$1] $2" | tee -a "$LOG_FILE"; }
 
