@@ -27,7 +27,7 @@ vmss_configs = {
     min_instance_count           = 1
     max_instance_count           = 5
     environment                  = "dev"
-    agent_pat_secret_name        = "pat"
+    #agent_pat_secret_name        = "pat"
     agent_user                   = "adodevagent"
     agent_version                = "4.264.2"
   }
@@ -40,7 +40,6 @@ tenant_id       = "8a18c8e4-c77a-4b73-8926-b2430f6c6a9a"
 
 azuredevops_org_service_url    = "https://dev.azure.com/achuthadevops25"
 azuredevops_pat_key_vault_id   = "/subscriptions/21a91bed-d635-447a-aec9-e80f32c23443/resourceGroups/devops-giri/providers/Microsoft.KeyVault/vaults/azuredevopsvault09"
-#azuredevops_pat_secret_name    = "pat"
 azdo_org_url          = "https://dev.azure.com/achuthadevops25"
 agent_pat_secret_name = "pat"
 agent_pool_name = "prod-vmss-pool"

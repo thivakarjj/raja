@@ -317,7 +317,7 @@ sed -i "s/__PAT_PLACEHOLDER__/$ESCAPED_PAT/g" /usr/local/bin/ado-offline-agent-c
 chmod +x /usr/local/bin/ado-offline-agent-cleaner.sh
 touch "$OFFLINE_CLEANUP_LOG"
 
-CRON_LINE="* * * * * /usr/bin/env bash /usr/local/bin/ado-offline-agent-cleaner.sh >> $OFFLINE_CLEANUP_LOG 2>&1"
+CRON_LINE="*/5 * * * * /usr/bin/env bash /usr/local/bin/ado-offline-agent-cleaner.sh >> $OFFLINE_CLEANUP_LOG 2>&1"
 
 ( crontab -u root -l 2>/dev/null | grep -v 'ado-offline-agent-cleaner.sh' || true; echo "$CRON_LINE" ) | crontab -u root -
 

@@ -25,7 +25,6 @@ module "linux_vmss" {
   min_instance_count           = each.value.min_instance_count
   max_instance_count           = each.value.max_instance_count
   environment                  = each.value.environment
-
   azdo_org_url                 = var.azdo_org_url
   agent_pat_secret_name        = var.agent_pat_secret_name
   key_vault_name               = each.value.key_vault_name

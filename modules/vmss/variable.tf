@@ -140,6 +140,7 @@ variable "azdo_org_url" {
 }
 
 variable "agent_pat_secret_name" {
-  description = "Name of the Key Vault secret that stores the ADO PAT"
+  description = "Name of the Key Vault secret that stores the Azure DevOps PAT"
   type        = string
 }
+

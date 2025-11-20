@@ -6,7 +6,6 @@ variable "vmss_configs" {
     location                     = string
     vm_size                      = string
     admin_username               = string
-    #custom_image_id              = string
     subnet_id                    = string
     nic_name                     = string
     ip_configurations            = map(object({ name = string }))
@@ -20,7 +19,6 @@ variable "vmss_configs" {
     min_instance_count           = number
     max_instance_count           = number
     environment                  = string
-    agent_pat_secret_name        = string
     key_vault_name               = string
     agent_version                = string
     agent_user                   = string
@@ -29,39 +27,44 @@ variable "vmss_configs" {
   default = {}
 }
 
-variable "subscription_id" {}
-variable "client_id" {}
-variable "client_secret" {}
-variable "tenant_id" {}
+variable "subscription_id" {
+  description = "Azure subscription ID"
+}
 
-variable "image_version" {
-  type    = string
-  default = "latest"
+variable "client_id" {
+  description = "Service principal client ID"
+}
+
+variable "client_secret" {
+  description = "Service principal client secret"
+}
+
+variable "tenant_id" {
+  description = "Azure AD tenant ID"
 }
 
 variable "azdo_org_url" {
-  type = string
+  description = "Azure DevOps org URL"
+  type        = string
 }
 
 variable "agent_pool_name" {
-  type = string
+  description = "ADO agent pool name"
+  type        = string
 }
 
 variable "agent_pat_secret_name" {
-  type = string
+  description = "PAT secret name for VMSS agent"
+  type        = string
 }
 
 variable "azuredevops_org_service_url" {
-  description = "Azure DevOps organization service URL"
+  description = "ADO org service URL"
   type        = string
 }
 
 variable "azuredevops_pat_key_vault_id" {
-  description = "Key Vault ID that contains the Azure DevOps PAT secret"
+  description = "Key Vault ID for provider PAT"
   type        = string
 }
 
-variable "azuredevops_pat_secret_name" {
-  description = "Secret name in Key Vault for the Azure DevOps PAT"
-  type        = string
-}
