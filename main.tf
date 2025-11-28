@@ -11,9 +11,9 @@ module "linux_vmss" {
   nic_name                     = each.value.nic_name
   ip_config_name               = values(each.value.ip_configurations)[0].name
   use_marketplace              = lookup(each.value, "use_marketplace", true)
-  publisher                    = lookup(each.value, "publisher", "Canonical")
-  offer                        = lookup(each.value, "offer", "0001-com-ubuntu-server-jammy")
-  sku                          = lookup(each.value, "sku", "22_04-lts")
+  publisher                    = lookup(each.value, "publisher", "RedHat")
+  offer                        = lookup(each.value, "offer", "RHEL")
+  sku                          = lookup(each.value, "sku", "8-lvm-gen2")
   image_version                = lookup(each.value, "image_version", "latest")
   zones                        = each.value.zones
   os_disk_caching              = each.value.os_disk_caching
@@ -30,4 +30,5 @@ module "linux_vmss" {
   key_vault_name               = each.value.key_vault_name
   agent_version                = each.value.agent_version
   agent_user                   = each.value.agent_user
+  terraform_version            = each.value.terraform_version
 }

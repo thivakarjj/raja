@@ -6,9 +6,9 @@ vmss_configs = {
     vm_size         = "Standard_NV4as_v4"
     admin_username  = "azureuser"
     use_marketplace = true
-    publisher       = "Canonical"
-    offer           = "0001-com-ubuntu-server-jammy"
-    sku             = "22_04-lts"
+    publisher       = "RedHat"
+    offer           = "RHEL"
+    sku             = "8-lvm-gen2"
     version         = "latest"
     #custom_image_id = "/subscriptions/ff61c832-819b-46dc-b485-7196a37165bc/resourceGroups/devops-giri/providers/Microsoft.Compute/galleries/linux/images/linux/versions/0.0.1"
     subnet_id       = "/subscriptions/21a91bed-d635-447a-aec9-e80f32c23443/resourceGroups/devops-giri/providers/Microsoft.Network/virtualNetworks/vnet-eastus2/subnets/dev"
@@ -19,7 +19,7 @@ vmss_configs = {
     zones                        = null
     os_disk_caching              = "ReadWrite"
     os_disk_storage_account_type = "Premium_LRS"
-    os_disk_size_gb              = 30
+    os_disk_size_gb              = 120
     key_vault_id                 = "/subscriptions/21a91bed-d635-447a-aec9-e80f32c23443/resourceGroups/devops-giri/providers/Microsoft.KeyVault/vaults/azuredevopsvault09"
     key_vault_name               = "azuredevopsvault09"
     tenant_id                    = "8a18c8e4-c77a-4b73-8926-b2430f6c6a9a"
@@ -30,6 +30,7 @@ vmss_configs = {
     #agent_pat_secret_name        = "pat"
     agent_user                   = "adodevagent"
     agent_version                = "4.264.2"
+    terraform_version            = "1.11.4"
   }
 }
 
@@ -42,4 +43,4 @@ azuredevops_org_service_url    = "https://dev.azure.com/achuthadevops25"
 azuredevops_pat_key_vault_id   = "/subscriptions/21a91bed-d635-447a-aec9-e80f32c23443/resourceGroups/devops-giri/providers/Microsoft.KeyVault/vaults/azuredevopsvault09"
 azdo_org_url          = "https://dev.azure.com/achuthadevops25"
 agent_pat_secret_name = "pat"
-agent_pool_name = "prod-vmss-pool"
+agent_pool_name = "Dev-vmss-pool"

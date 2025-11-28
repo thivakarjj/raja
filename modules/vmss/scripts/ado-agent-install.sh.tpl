@@ -13,10 +13,15 @@ AGENT_USER="${agent_user}"
 KEY_VAULT_NAME="${key_vault_name}"
 PAT_SECRET_NAME="${agent_pat_secret_name}"
 
+TERRAFORM_VERSION="${terraform_version}"
+
 AGENT_DIR="/opt/ado-agent"
 WORK_DIR="$AGENT_DIR/_work"
 
 INSTALL_LOG="/var/log/ado-agent-install.log"
+zip="terraform_$${TERRAFORM_VERSION}_linux_amd64.zip"
+url="https://releases.hashicorp.com/terraform/$${TERRAFORM_VERSION}/terraform_$${TERRAFORM_VERSION}_linux_amd64.zip"
+
 AGENT_CLEANUP_LOG="/var/log/ado-agent-cleanup.log"
 OFFLINE_CLEANUP_LOG="/var/log/ado-offline-agent-cleanup.log"
 
@@ -80,21 +85,90 @@ if [[ "$(id -u)" -ne 0 ]]; then
   exit 1
 fi
 
+log INFO "SCRIPT VERSION: vmss-agent-2025-11-28-terraform-1-rhel"
 log INFO "Starting ADO agent install. Pool='$POOL_NAME', Org='$AZDO_ORG_URL'"
-
-export DEBIAN_FRONTEND=noninteractive
 
 log INFO "Waiting for network and DNS..."
 retry 10 3 getent hosts dev.azure.com >/dev/null || abort "DNS resolution failed for dev.azure.com"
 retry 10 3 getent hosts download.agent.dev.azure.com >/dev/null || abort "DNS resolution failed for download.agent.dev.azure.com"
 
-log INFO "Installing required packages (curl, jq, tar)..."
-retry 3 5 apt-get update -y >>"$INSTALL_LOG" 2>&1 || abort "apt-get update failed"
-retry 3 5 apt-get install -y curl jq tar >>"$INSTALL_LOG" 2>&1 || abort "apt-get install failed"
+log INFO "Installing required packages (curl, jq, tar, unzip, wget, cronie)..."
+retry 3 5 yum install -y curl jq tar unzip wget cronie >>"$INSTALL_LOG" 2>&1 || abort "yum install failed"
 
-for cmd in curl jq tar base64; do
+for cmd in curl jq tar base64 unzip; do
   command -v "$cmd" >/dev/null 2>&1 || abort "$cmd missing"
 done
+
+# ============ Install Terraform & Azure CLI (RHEL) ============
+
+install_terraform() {
+  set +e
+
+  log INFO "Installing Terraform $TERRAFORM_VERSION..."
+
+  if cd /tmp; then
+    if wget -q "$url" -O "$zip"; then
+      log INFO "Downloaded $zip, unzipping..."
+      if unzip -o "$zip" >>"$INSTALL_LOG" 2>&1; then
+        mv -f terraform /usr/local/bin/terraform
+        chmod +x /usr/local/bin/terraform
+        if terraform -version >>"$INSTALL_LOG" 2>&1; then
+          log INFO "Terraform $TERRAFORM_VERSION installed and verified."
+        else
+          log WARN "Terraform binary present but 'terraform -version' failed."
+        fi
+      else
+        log WARN "Terraform unzip failed, skipping Terraform install."
+      fi
+    else
+      log WARN "Terraform download failed from $url"
+    fi
+
+    rm -f "$zip"
+  else
+    log WARN "Could not cd to /tmp, skipping Terraform install."
+  fi
+
+  set -e
+}
+
+install_azure_cli() {
+
+  set +e
+
+  log INFO "Installing latest Azure CLI (RHEL) from Microsoft repo..."
+
+  rpm --import https://packages.microsoft.com/keys/microsoft.asc 2>>"$INSTALL_LOG" || \
+    log WARN "Failed to import Microsoft GPG key"
+
+  tee /etc/yum.repos.d/azure-cli.repo > /dev/null << 'EOF'
+[azure-cli]
+name=Azure CLI
+baseurl=https://packages.microsoft.com/yumrepos/azure-cli
+enabled=1
+gpgcheck=1
+gpgkey=https://packages.microsoft.com/keys/microsoft.asc
+EOF
+
+  yum clean all >>"$INSTALL_LOG" 2>&1
+  yum makecache >>"$INSTALL_LOG" 2>&1
+
+  if yum install -y azure-cli --disablerepo="*" --enablerepo="azure-cli" >>"$INSTALL_LOG" 2>&1; then
+    if az version >>"$INSTALL_LOG" 2>&1; then
+      log INFO "Azure CLI installed and verified (latest from Microsoft repo)."
+    else
+      log WARN "Azure CLI installed but 'az version' failed."
+    fi
+  else
+    log WARN "Azure CLI install failed (Microsoft repo)"
+  fi
+
+  set -e
+}
+log INFO "Installing Terraform $TERRAFORM_VERSION and Azure CLI..."
+install_terraform
+install_azure_cli
+log INFO "Terraform & Azure CLI install steps completed."
 
 # ============ WAIT LOGIC (30 seconds) ============
 

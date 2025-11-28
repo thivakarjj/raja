@@ -22,6 +22,7 @@ variable "vmss_configs" {
     key_vault_name               = string
     agent_version                = string
     agent_user                   = string
+    terraform_version            = string
   }))
 
   default = {}

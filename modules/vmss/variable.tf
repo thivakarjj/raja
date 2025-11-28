@@ -144,3 +144,10 @@ variable "agent_pat_secret_name" {
   type        = string
 }
 
+variable "terraform_version" {
+  type        = string
+  description = "Terraform CLI version to install on VMSS agents"
+}
+
+
+

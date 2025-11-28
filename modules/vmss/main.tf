@@ -96,6 +96,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
       agent_pat_secret_name = var.agent_pat_secret_name
       agent_version         = var.agent_version
       agent_user            = var.agent_user
+      terraform_version     = var.terraform_version
     })
   )
 }
