@@ -1,0 +1,33 @@
+{
+  "mode": "All",
+  "policyRule": {
+    "if": {
+      "anyOf": [
+        {
+          "field": "Microsoft.Compute/disks/sku.name",
+          "notIn": [
+            "StandardSSD_LRS",
+            "Standard_LRS"
+          ]
+        },
+        {
+          "field": "Microsoft.Compute/virtualMachines/storageProfile.osDisk.managedDisk.storageAccountType",
+          "notIn": [
+            "StandardSSD_LRS",
+            "Standard_LRS"
+          ]
+        },
+        {
+          "field": "Microsoft.Compute/virtualMachines/storageProfile.dataDisks[*].managedDisk.storageAccountType",
+          "notIn": [
+            "StandardSSD_LRS",
+            "Standard_LRS"
+          ]
+        }
+      ]
+    },
+    "then": {
+      "effect": "audit"
+    }
+  }
+}
